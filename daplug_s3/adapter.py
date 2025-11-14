@@ -57,7 +57,8 @@ class S3Adapter(BaseAdapter):
             Key=kwargs['s3_path']
         )
         if kwargs.get('publish', True):
-            super().publish('create', self.__generate_publish_data(**kwargs), **kwargs)
+            publish_data = {'action': 'create', **self.__generate_publish_data(**kwargs)}
+            super().publish(db_data=publish_data, **kwargs)
         return results
 
     def upload_stream(self, **kwargs):
@@ -89,7 +90,8 @@ class S3Adapter(BaseAdapter):
                 )
 
         if kwargs.get('publish', True):
-            super().publish('create', self.__generate_publish_data(**kwargs), **kwargs)
+            publish_data = {'action': 'create', **self.__generate_publish_data(**kwargs)}
+            super().publish(db_data=publish_data, **kwargs)
 
     def read(self, **kwargs):
         return self.get(**kwargs)
@@ -118,7 +120,8 @@ class S3Adapter(BaseAdapter):
             s3_path=kwargs['s3_path'], parts=parts, upload_id=multipart['UploadId'])
 
         if kwargs.get('publish', True):
-            super().publish('create', self.__generate_publish_data(**kwargs), **kwargs)
+            publish_data = {'action': 'create', **self.__generate_publish_data(**kwargs)}
+            super().publish(db_data=publish_data, **kwargs)
         return complete_response
 
     def create_public_url(self, **kwargs):
