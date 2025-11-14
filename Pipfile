@@ -1,0 +1,33 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+python_version = "3.9.17"
+
+[packages]
+boto3 = "*"
+botocore = "*"
+jsonpickle = "*"
+daplug-core = "==1.0.0b5"
+
+[dev-packages]
+mypy = "*"
+lxml = "*"
+pylint = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-html = "*"
+pipenv-setup = "*"
+vistir = "==0.5.1"
+
+[scripts]
+lint = "pylint --fail-under 10 daplug_s3"
+typing-report = "mypy --html-report ./coverage/typing daplug_s3"
+type-check = "mypy daplug_s3"
+test = "pytest tests/unit"
+test_ci = "pytest"
+integrations = "bash -c 'docker compose -f tests/integrations/docker-compose.yml up -d dynamodb-local >/dev/null; cleanup() { docker compose -f tests/integrations/docker-compose.yml down >/dev/null; }; trap cleanup EXIT INT TERM; AWS_ACCESS_KEY_ID=test AWS_SECRET_ACCESS_KEY=test AWS_DEFAULT_REGION=us-east-2 pytest tests/integration'"
+coverage = "coverage run --source daplug_s3 -m pytest tests --cov=daplug_s3 --junitxml ./coverage/reports/junit.xml --cov-report xml:./coverage/reports/cov.xml --html=./coverage/reports/index.html --self-contained-html --cov-report html:./coverage/pretty -p no:warnings -o log_cli=true"
+setup-sync = "pipenv-setup sync"
