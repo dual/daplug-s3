@@ -9,6 +9,7 @@ from typing import Callable, Dict
 import boto3
 import pytest
 
+from daplug_core.base_adapter import BaseAdapter
 from daplug_s3.adapter import S3Adapter
 
 
@@ -44,6 +45,14 @@ def integration_bucket() -> str:
 @pytest.fixture(scope="session")
 def integration_endpoint() -> str:
     return os.getenv("S3_ENDPOINT", "http://localhost:4566")
+
+
+@pytest.fixture(autouse=True)
+def _suppress_publish(monkeypatch: pytest.MonkeyPatch) -> None:
+    def _noop(self, db_data, **kwargs):
+        return None
+
+    monkeypatch.setattr(BaseAdapter, "publish", _noop, raising=False)
 
 
 @pytest.fixture(scope="session")

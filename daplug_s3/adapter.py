@@ -56,9 +56,7 @@ class S3Adapter(BaseAdapter):
             Bucket=self.bucket,
             Key=kwargs['s3_path']
         )
-        if kwargs.get('publish', True):
-            publish_data = {'action': 'create', **self.__generate_publish_data(**kwargs)}
-            super().publish(db_data=publish_data, **kwargs)
+        super().publish(db_data=self.__generate_publish_data(**kwargs), **kwargs)
         return results
 
     def upload_stream(self, **kwargs):
@@ -88,10 +86,7 @@ class S3Adapter(BaseAdapter):
                     },
                     Config=conf
                 )
-
-        if kwargs.get('publish', True):
-            publish_data = {'action': 'create', **self.__generate_publish_data(**kwargs)}
-            super().publish(db_data=publish_data, **kwargs)
+        super().publish(db_data=self.__generate_publish_data(**kwargs), **kwargs)
 
     def read(self, **kwargs):
         return self.get(**kwargs)
@@ -118,10 +113,7 @@ class S3Adapter(BaseAdapter):
             parts.append({'ETag': part_response['ETag'], 'PartNumber': part_number})
         complete_response = self.__complete_multipart_upload(
             s3_path=kwargs['s3_path'], parts=parts, upload_id=multipart['UploadId'])
-
-        if kwargs.get('publish', True):
-            publish_data = {'action': 'create', **self.__generate_publish_data(**kwargs)}
-            super().publish(db_data=publish_data, **kwargs)
+        super().publish(db_data=self.__generate_publish_data(**kwargs), **kwargs)
         return complete_response
 
     def create_public_url(self, **kwargs):
@@ -177,7 +169,6 @@ class S3Adapter(BaseAdapter):
         pages = paginator.paginate(Bucket=self.bucket, Prefix=kwargs.get('dir_name'))
         if kwargs.get('date'):
             return [obj['Key'] for page in pages for obj in page['Contents'] if obj['LastModified'].replace(tzinfo=None) > kwargs.get('date')]
-
         return [obj['Key'] for page in pages for obj in page['Contents']]
 
     def rename_object(self, **kwargs):

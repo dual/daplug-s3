@@ -18,19 +18,7 @@ def test_put_serializes_json_and_publishes_presigned_url(s3_components, file_byt
     saved = json.loads(adapter.client.get_object(Bucket=s3_components["bucket"], Key="docs/doc.json")["Body"].read())
 
     assert saved == payload
-    assert tracker.last()["action"] == "create"
-    assert "presigned_url" in tracker.last()["payload"]
-
-
-def test_put_skips_publish_when_disabled(s3_components, file_bytes):
-    adapter = s3_components["adapter"]
-    data = file_bytes("sample.txt")
-
-    adapter.put(s3_path="docs/raw.txt", data=data, encode=False, publish=False)
-    stored = adapter.client.get_object(Bucket=s3_components["bucket"], Key="docs/raw.txt")["Body"].read()
-
-    assert stored == data
-    assert s3_components["publish_tracker"].calls == []
+    assert "presigned_url" in tracker.last()["data"]
 
 
 def test_create_uses_put_behavior(s3_components):
@@ -40,7 +28,7 @@ def test_create_uses_put_behavior(s3_components):
     result = adapter.client.get_object(Bucket=s3_components["bucket"], Key="docs/create.txt")["Body"].read().decode()
 
     assert result == "created"
-    assert s3_components["publish_tracker"].last()["action"] == "create"
+    assert "presigned_url" in s3_components["publish_tracker"].last()["data"]
 
 
 def test_upload_stream_handles_file_object(s3_components, file_bytes):
@@ -62,13 +50,13 @@ def test_upload_stream_accepts_raw_data(s3_components, file_bytes):
     saved = adapter.client.get_object(Bucket=s3_components["bucket"], Key="docs/file.txt")["Body"].read()
 
     assert saved == data
-    assert s3_components["publish_tracker"].last()["action"] == "create"
+    assert "presigned_url" in s3_components["publish_tracker"].last()["data"]
 
 
 def test_get_returns_json_payload(s3_components, file_bytes):
     adapter = s3_components["adapter"]
     payload = json.loads(file_bytes("sample.json").decode())
-    adapter.put(s3_path="docs/config.json", data=payload, json=True, publish=False)
+    adapter.put(s3_path="docs/config.json", data=payload, json=True)
 
     result = adapter.get(s3_path="docs/config.json", json=True)
 
@@ -116,7 +104,7 @@ def test_multipart_upload_combines_chunks(s3_components, file_bytes):
     saved = adapter.client.get_object(Bucket=s3_components["bucket"], Key="files/data.csv")["Body"].read()
 
     assert saved == data
-    assert s3_components["publish_tracker"].last()["action"] == "create"
+    assert "presigned_url" in s3_components["publish_tracker"].last()["data"]
 
 
 def test_create_public_url_includes_bucket(s3_components):

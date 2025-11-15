@@ -10,10 +10,9 @@ class PublishTracker:
     def __init__(self) -> None:
         self.calls: List[Dict[str, Any]] = []
 
-    def __call__(self, action: str, payload: Any, **metadata: Any) -> None:
+    def __call__(self, db_data: Dict[str, Any], **metadata: Any) -> None:  # type: ignore[override]
         self.calls.append({
-            "action": action,
-            "payload": payload,
+            "data": db_data,
             "metadata": metadata,
         })
 
