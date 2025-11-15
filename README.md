@@ -1,4 +1,4 @@
-# ☁️ daplug-s3 (da•plug)
+# 🪣 daplug-s3 (da•plug)
 
 > **Schema-Driven S3 Normalization & Event Publishing for Python**
 
@@ -55,16 +55,16 @@ s3 = adapter(
 
 ### Adapter Configuration Arguments
 
-| Kwarg | Type | Required | Description |
-| --- | --- | --- | --- |
-| `endpoint` | `str \| None` | No | Custom S3/LocalStack endpoint. Leave `None` for AWS default. |
-| `bucket` | `str` | Yes | Default bucket applied to every request. |
-| `aws_access_key_id` | `str` | Yes | IAM access key. |
-| `aws_secret_access_key` | `str` | Yes | IAM secret key. |
-| `region` | `str` | Yes | AWS region name. |
-| `sns_arn` | `str` | No | SNS topic ARN used by `BaseAdapter.publish`. |
-| `sns_endpoint` | `str` | No | SNS endpoint override (LocalStack). |
-| `sns_attributes` | `dict[str, str | int | float | bool]` | No | Default SNS message attributes. |
+| Kwarg                   | Type                       | Required | Description                                                  |
+|-------------------------|----------------------------|----------|--------------------------------------------------------------|
+| `endpoint`              | `str,None`                 | No       | Custom S3/LocalStack endpoint. Leave `None` for AWS default. |
+| `bucket`                | `str`                      | Yes      | Default bucket applied to every request.                     |
+| `aws_access_key_id`     | `str`                      | Yes      | IAM access key.                                              |
+| `aws_secret_access_key` | `str`                      | Yes      | IAM secret key.                                              |
+| `region`                | `str`                      | Yes      | AWS region name.                                             |
+| `sns_arn`               | `str`                      | No       | SNS topic ARN used by `BaseAdapter.publish`.                 |
+| `sns_endpoint`          | `str`                      | No       | SNS endpoint override (LocalStack).                          |
+| `sns_attributes`        | `dict[str,int,float,bool]` | No       | Default SNS message attributes.                              |
 
 All public methods below accept keyword arguments only.
 
@@ -73,6 +73,7 @@ All public methods below accept keyword arguments only.
 ## 🧰 API Reference & Examples
 
 ### `put(**kwargs)` (alias: `create`)
+
 Store data in S3 with optional JSON encoding.
 
 ```python
@@ -80,19 +81,20 @@ payload = {"type": "invoice", "id": 256}
 s3.put(s3_path="docs/invoice-256.json", data=payload, json=True)
 ```
 
-| Kwarg | Type | Required | Default | Description |
-| --- | --- | --- | --- | --- |
-| `s3_path` | `str` | Yes | — | Object key. |
-| `data` | `bytes \| str \| dict` | Yes | — | Content to write. |
-| `json` | `bool` | No | `False` | Encode via `jsonpickle`. |
-| `encode` | `bool` | No | `True` | Convert strings to UTF-8 bytes. |
-| `public_read` | `bool` | No | `False` | Applies `public-read` ACL. |
+| Kwarg         | Type                   | Required | Default | Description                     |
+|---------------|------------------------|----------|---------|---------------------------------|
+| `s3_path`     | `str`                  | Yes      | —       | Object key.                     |
+| `data`        | `bytes \| str \| dict` | Yes      | —       | Content to write.               |
+| `json`        | `bool`                 | No       | `False` | Encode via `jsonpickle`.        |
+| `encode`      | `bool`                 | No       | `True`  | Convert strings to UTF-8 bytes. |
+| `public_read` | `bool`                 | No       | `False` | Applies `public-read` ACL.      |
 
 Always triggers `BaseAdapter.publish` with a presigned URL payload.
 
 ---
 
 ### `upload_stream(**kwargs)`
+
 Upload streamed or buffered data.
 
 ```python
@@ -115,6 +117,7 @@ Either `io` or `data` must be supplied.
 ---
 
 ### `get(**kwargs)` (alias: `read`)
+
 Retrieve and optionally decode objects.
 
 ```python
@@ -132,6 +135,7 @@ config = s3.get(s3_path="docs/invoice-256.json", json=True)
 ---
 
 ### `download(**kwargs)`
+
 Save S3 content locally.
 
 ```python
@@ -148,6 +152,7 @@ Returns the `download_path` string.
 ---
 
 ### `multipart_upload(**kwargs)`
+
 Manual chunk uploads.
 
 ```python
@@ -165,6 +170,7 @@ Publishes a presigned URL when complete.
 ---
 
 ### `create_public_url(**kwargs)`
+
 Generate unsigned URLs for public objects.
 
 ```python
@@ -180,6 +186,7 @@ Only works for objects uploaded with `public_read=True`.
 ---
 
 ### `create_presigned_read_url(**kwargs)`
+
 Time-limited access.
 
 ```python
@@ -194,6 +201,7 @@ signed_url = s3.create_presigned_read_url(s3_path="docs/invoice-256.json", expir
 ---
 
 ### `create_presigned_post_url(**kwargs)`
+
 Generate POST policies for browser uploads.
 
 ```python
@@ -215,6 +223,7 @@ post_config = s3.create_presigned_post_url(
 ---
 
 ### `object_exist(**kwargs)`
+
 Check for object existence.
 
 ```python
@@ -260,6 +269,7 @@ Outputs a list of object keys.
 ---
 
 ### `rename_object(**kwargs)`
+
 Copy + delete convenience.
 
 ```python
@@ -274,6 +284,7 @@ s3.rename_object(old_file_name="logs/old.txt", new_file_name="logs/new.txt")
 ---
 
 ### `delete(**kwargs)`
+
 Remove an object.
 
 ```python
