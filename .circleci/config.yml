@@ -131,7 +131,7 @@ jobs:
             - pypi-publish
     package-smoke-test:
         docker:
-            - image: cimg/python:3.9.17
+            - image: cimg/python:3.10.14
             - image: localstack/localstack:3.2
               environment:
                   SERVICES: s3
