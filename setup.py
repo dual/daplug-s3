@@ -22,8 +22,9 @@ setup(
     packages=find_packages(),
     python_requires=">=3.10",
     install_requires=[
-        "boto3==1.40.69; python_version >= '3.9'",
-        "botocore==1.40.75; python_version >= '3.9'",
+        "boto3>=1.42.4,<2; python_version >= '3.9'",
+        "botocore>=1.42.4,<2; python_version >= '3.9'",
+        "jsonpickle>=4.1.1,<5; python_version >= '3.8'",
         "daplug-core==1.0.0b5; python_version >= '3.9'",
     ],
     keywords=[
