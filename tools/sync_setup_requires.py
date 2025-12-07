@@ -1,10 +1,4 @@
-"""Synchronize install_requires in setup.py from Pipfile.lock without hard pins.
-
-Usage: python tools/sync_setup_requires.py
-This reads the top-level packages from Pipfile and the resolved versions from
-Pipfile.lock, then writes a relaxed (>=current,<next major) set into
-setup.py. Packages in PINNED_PACKAGES keep exact pins.
-"""
+"""Synchronize install_requires in setup.py from Pipfile.lock without hard pins (except allowlist)."""
 
 from __future__ import annotations
 
@@ -17,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PIPFILE = ROOT / "Pipfile"
 LOCKFILE = ROOT / "Pipfile.lock"
 SETUP = ROOT / "setup.py"
-PINNED_PACKAGES = {"daplug-core"}
+PINNED_PACKAGES: set[str] = set()
 
 
 def load_top_level_packages(pipfile_path: Path) -> list[str]:
