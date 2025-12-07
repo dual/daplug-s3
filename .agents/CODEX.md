@@ -4,7 +4,7 @@ This guide keeps agents aligned with the project’s expectations. Read it befor
 
 ## Mission Overview
 - Library: `daplug_s3`, a schema-aware S3 adapter built atop `daplug_core.BaseAdapter`.
-- Python version: **3.9.17** (enforced via Pipenv).
+- Python version: **3.10.14** (enforced via Pipenv).
 - Key feature set: S3 CRUD operations, streaming uploads, multipart uploads, presigned URLs, SNS publish hooks.
 
 ## Environment & Tooling

@@ -5,7 +5,7 @@
 [![CircleCI](https://circleci.com/gh/dual/daplug-s3.svg?style=shield)](https://circleci.com/gh/dual/daplug-s3)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dual_daplug-s3&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=dual_daplug-s3)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=dual_daplug-s3&metric=coverage)](https://sonarcloud.io/summary/new_code?id=dual_daplug-s3)
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/downloads/)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 [![PyPI package](https://img.shields.io/pypi/v/daplug-s3?color=blue&label=pypi%20package)](https://pypi.org/project/daplug-s3/)
 [![License](https://img.shields.io/badge/license-apache%202.0-blue)](LICENSE)
 [![Contributions](https://img.shields.io/badge/contributions-welcome-blue)](https://github.com/paulcruse3/daplug-s3/issues)
@@ -33,7 +33,7 @@ pip install daplug-s3
 pipenv install daplug-s3
 ```
 
-The library targets Python **3.9+**.
+The library targets Python **3.10+**.
 
 ---
 
