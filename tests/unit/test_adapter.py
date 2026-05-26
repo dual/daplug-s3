@@ -31,6 +31,27 @@ def test_create_uses_put_behavior(s3_components):
     assert "presigned_url" in s3_components["publish_tracker"].last()["data"]
 
 
+def test_put_forwards_publish_false_kwarg(s3_components):
+    adapter = s3_components["adapter"]
+
+    adapter.put(s3_path="docs/skip.txt", data="hello", encode=True, publish=False)
+
+    last = s3_components["publish_tracker"].last()
+    assert last is not None
+    assert last["metadata"].get("publish") is False
+
+
+def test_put_forwards_publish_data_kwarg(s3_components):
+    adapter = s3_components["adapter"]
+    override = {"event": "custom-shape"}
+
+    adapter.put(s3_path="docs/override.txt", data="hello", encode=True, publish_data=override)
+
+    last = s3_components["publish_tracker"].last()
+    assert last is not None
+    assert last["metadata"].get("publish_data") == override
+
+
 def test_upload_stream_handles_file_object(s3_components, file_bytes):
     adapter = s3_components["adapter"]
     data = file_bytes("sample.pdf")

@@ -89,7 +89,10 @@ s3.put(s3_path="docs/invoice-256.json", data=payload, json=True)
 | `encode`      | `bool`                 | No       | `True`  | Convert strings to UTF-8 bytes. |
 | `public_read` | `bool`                 | No       | `False` | Applies `public-read` ACL.      |
 
-Always triggers `BaseAdapter.publish` with a presigned URL payload.
+Always triggers `BaseAdapter.publish` with a presigned URL payload. Pass
+`publish=False` to skip the SNS publish for this call, or
+`publish_data={...}` to replace the published payload entirely (the
+upload itself is unchanged).
 
 ---
 
