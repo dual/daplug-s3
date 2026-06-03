@@ -62,7 +62,10 @@ class S3Adapter(BaseAdapter):
 
     def upload_stream(self, **kwargs):
         conf = boto3.s3.transfer.TransferConfig(
-            multipart_threshold=kwargs.get('threshold', 10000),
+            # 8MB matches boto3's own default. A small threshold (the old 10KB) forces
+            # nearly every object through S3 multipart (3+ API calls each) for no benefit,
+            # since multipart parts have a 5MB minimum. Callers can still override via `threshold`.
+            multipart_threshold=kwargs.get('threshold', 8388608),
             max_concurrency=kwargs.get('concurrency', 4)
         )
 

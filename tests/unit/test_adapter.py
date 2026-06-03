@@ -74,6 +74,38 @@ def test_upload_stream_accepts_raw_data(s3_components, file_bytes):
     assert "presigned_url" in s3_components["publish_tracker"].last()["data"]
 
 
+def _capture_transfer_config(monkeypatch):
+    import boto3.s3.transfer
+
+    captured = {}
+    real = boto3.s3.transfer.TransferConfig
+
+    def fake(**kwargs):
+        captured.update(kwargs)
+        return real(**kwargs)
+
+    monkeypatch.setattr(boto3.s3.transfer, "TransferConfig", fake)
+    return captured
+
+
+def test_upload_stream_defaults_to_8mb_multipart_threshold(s3_components, file_bytes, monkeypatch):
+    captured = _capture_transfer_config(monkeypatch)
+    adapter = s3_components["adapter"]
+
+    adapter.upload_stream(s3_path="docs/file.pdf", io=BytesIO(file_bytes("sample.pdf")))
+
+    assert captured["multipart_threshold"] == 8388608
+
+
+def test_upload_stream_threshold_is_overridable(s3_components, file_bytes, monkeypatch):
+    captured = _capture_transfer_config(monkeypatch)
+    adapter = s3_components["adapter"]
+
+    adapter.upload_stream(s3_path="docs/file.pdf", io=BytesIO(file_bytes("sample.pdf")), threshold=4096)
+
+    assert captured["multipart_threshold"] == 4096
+
+
 def test_get_returns_json_payload(s3_components, file_bytes):
     adapter = s3_components["adapter"]
     payload = json.loads(file_bytes("sample.json").decode())
