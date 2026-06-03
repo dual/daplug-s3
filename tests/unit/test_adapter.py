@@ -232,3 +232,42 @@ def test_delete_removes_object(s3_components):
     adapter.delete(s3_path="files/delete.txt")
 
     assert adapter.object_exist(s3_path="files/delete.txt") is False
+
+
+def test_put_forwards_extra_args(s3_components):
+    adapter = s3_components["adapter"]
+
+    adapter.put(
+        s3_path="docs/with_meta.pdf",
+        data="hello",
+        encode=True,
+        extra_args={"ContentType": "application/pdf", "Metadata": {"uploaded-by": "test"}},
+    )
+
+    head = adapter.client.head_object(Bucket=s3_components["bucket"], Key="docs/with_meta.pdf")
+    assert head["ContentType"] == "application/pdf"
+    assert head["Metadata"] == {"uploaded-by": "test"}
+
+
+def test_put_without_extra_args_is_unchanged(s3_components):
+    adapter = s3_components["adapter"]
+
+    adapter.put(s3_path="docs/plain.txt", data="hello", encode=True)
+
+    saved = adapter.client.get_object(Bucket=s3_components["bucket"], Key="docs/plain.txt")["Body"].read().decode()
+    assert saved == "hello"
+
+
+def test_upload_stream_forwards_extra_args(s3_components, file_bytes):
+    adapter = s3_components["adapter"]
+    data = file_bytes("sample.pdf")
+
+    adapter.upload_stream(
+        s3_path="docs/stream_meta.pdf",
+        io=BytesIO(data),
+        extra_args={"ContentType": "application/pdf", "ServerSideEncryption": "AES256"},
+    )
+
+    head = adapter.client.head_object(Bucket=s3_components["bucket"], Key="docs/stream_meta.pdf")
+    assert head["ContentType"] == "application/pdf"
+    assert head["ServerSideEncryption"] == "AES256"

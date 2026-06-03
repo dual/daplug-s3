@@ -54,7 +54,8 @@ class S3Adapter(BaseAdapter):
             ACL=acl,
             Body=body,
             Bucket=self.bucket,
-            Key=kwargs['s3_path']
+            Key=kwargs['s3_path'],
+            **kwargs.get('extra_args', {})
         )
         super().publish(db_data=self.__generate_publish_data(**kwargs), **kwargs)
         return results
@@ -71,7 +72,8 @@ class S3Adapter(BaseAdapter):
                 self.bucket,
                 kwargs['s3_path'],
                 ExtraArgs={
-                    'ACL': self.__set_acl(kwargs.get('public_read'))
+                    'ACL': self.__set_acl(kwargs.get('public_read')),
+                    **kwargs.get('extra_args', {})
                 },
                 Config=conf
             )
@@ -82,7 +84,8 @@ class S3Adapter(BaseAdapter):
                     self.bucket,
                     kwargs['s3_path'],
                     ExtraArgs={
-                        'ACL': self.__set_acl(kwargs.get('public_read'))
+                        'ACL': self.__set_acl(kwargs.get('public_read')),
+                        **kwargs.get('extra_args', {})
                     },
                     Config=conf
                 )
@@ -104,7 +107,7 @@ class S3Adapter(BaseAdapter):
         return kwargs['download_path']
 
     def multipart_upload(self, **kwargs):
-        multipart = self.client.create_multipart_upload(Bucket=self.bucket, Key=kwargs['s3_path'])
+        multipart = self.client.create_multipart_upload(Bucket=self.bucket, Key=kwargs['s3_path'], **kwargs.get('extra_args', {}))
         parts = []
         for part, chunk in enumerate(kwargs['chunks']):
             part_number = part + 1  # @NOTE must be an integer between 1 and 10000, inclusive
