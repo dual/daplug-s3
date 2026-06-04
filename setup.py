@@ -22,10 +22,10 @@ setup(
     packages=find_packages(),
     python_requires=">=3.10",
     install_requires=[
-        "boto3>=1.42.4,<2; python_version >= '3.9'",
-        "botocore>=1.42.4,<2; python_version >= '3.9'",
-        "jsonpickle>=4.1.1,<5; python_version >= '3.8'",
-        "daplug-core==1.0.0b7; python_version >= '3.9'",
+        "boto3>=1.43.23,<2; python_version >= '3.10'",
+        "botocore>=1.43.23,<2; python_version >= '3.10'",
+        "jsonpickle>=4.1.2,<5; python_version >= '3.8'",
+        "daplug-core>=1.0.0b8,<2; python_version >= '3.10'",
     ],
     keywords=[
         "dynamodb",

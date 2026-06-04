@@ -10,7 +10,7 @@ python_version = "3.10.14"
 boto3 = "*"
 botocore = "*"
 jsonpickle = "*"
-daplug-core = "==1.0.0b7"
+daplug-core = "==1.0.0b8"
 
 [dev-packages]
 mypy = "*"
