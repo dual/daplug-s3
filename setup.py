@@ -25,7 +25,7 @@ setup(
         "boto3>=1.43.23,<2; python_version >= '3.10'",
         "botocore>=1.43.23,<2; python_version >= '3.10'",
         "jsonpickle>=4.1.2,<5; python_version >= '3.8'",
-        "daplug-core>=1.0.0b8,<2; python_version >= '3.10'",
+        "daplug-core>=1.0.0b9,<2; python_version >= '3.10'",
     ],
     keywords=[
         "dynamodb",
